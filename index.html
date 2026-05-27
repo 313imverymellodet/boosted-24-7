@@ -3,17 +3,102 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Boosted 24/7 — Detroit's roadside boost</title>
+<meta name="theme-color" content="#d63919" />
 
+<title>Boosted 24/7 — Detroit's 24/7 Roadside Battery Boost · From $60</title>
+<meta name="description" content="Dead battery in Detroit? Boosted 24/7 dispatches a truck to you in ~20 minutes, 24 hours a day. Flat-rate $60 inside the city, $80 metro. Honest pricing, no membership." />
+<link rel="canonical" href="https://boosted-24-7.vercel.app/" />
+
+<!-- Open Graph / social share -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Boosted 24/7" />
+<meta property="og:title" content="Boosted 24/7 — Detroit's 24/7 Roadside Battery Boost" />
+<meta property="og:description" content="Stranded in Detroit Metro? A boosted truck is already nearby. ~20-minute response, day or night, $60 flat." />
+<meta property="og:url" content="https://boosted-24-7.vercel.app/" />
+<meta property="og:image" content="https://boosted-24-7.vercel.app/images/detroit-skyline.jpg" />
+<meta property="og:image:alt" content="Detroit riverfront skyline at night — Boosted 24/7 dispatch territory." />
+<meta property="og:locale" content="en_US" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Boosted 24/7 — Detroit Roadside Battery Boost" />
+<meta name="twitter:description" content="~20-min response, 24/7, $60 flat inside Detroit. No membership." />
+<meta name="twitter:image" content="https://boosted-24-7.vercel.app/images/detroit-skyline.jpg" />
+
+<!-- Favicon: inline SVG bolt mark, no extra request -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230c0b09'/%3E%3Cpath d='M18 4 L7 18 L14 18 L12 28 L25 12 L18 12 Z' fill='%23d63919'/%3E%3C/svg%3E" />
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230c0b09'/%3E%3Cpath d='M18 4 L7 18 L14 18 L12 28 L25 12 L18 12 Z' fill='%23d63919'/%3E%3C/svg%3E" />
+
+<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" />
 
 <link rel="stylesheet" href="styles.css" />
 
+<!-- React + Babel via CDN. Note: development builds; a future Vite/Next migration
+     would drop runtime transpilation and shrink payload significantly. -->
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<!-- Structured data: lets Google show phone/hours/service area directly in search results -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AutomotiveBusiness",
+  "name": "Boosted 24/7",
+  "image": "https://boosted-24-7.vercel.app/images/detroit-skyline.jpg",
+  "url": "https://boosted-24-7.vercel.app/",
+  "telephone": "+1-313-771-7521",
+  "description": "Detroit Metro 24/7 roadside battery boost service. Flat-rate $60 inside Detroit, $80 in extended coverage. ~20-minute average response, day or night.",
+  "priceRange": "$60-$80",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Detroit",
+    "addressRegion": "MI",
+    "addressCountry": "US"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "42.3314",
+    "longitude": "-83.0458"
+  },
+  "areaServed": [
+    { "@type": "City", "name": "Detroit" },
+    { "@type": "City", "name": "Warren" },
+    { "@type": "City", "name": "Southfield" },
+    { "@type": "City", "name": "Sterling Heights" },
+    { "@type": "City", "name": "Livonia" },
+    { "@type": "City", "name": "Westland" }
+  ],
+  "openingHoursSpecification": [{
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+    "opens": "00:00",
+    "closes": "23:59"
+  }],
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Roadside Boost Services",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "name": "Detroit Metro Boost",
+        "price": "60",
+        "priceCurrency": "USD",
+        "description": "Standard boost inside Detroit city limits, ~20-minute response."
+      },
+      {
+        "@type": "Offer",
+        "name": "Outside City Boost",
+        "price": "80",
+        "priceCurrency": "USD",
+        "description": "Extended coverage — Warren, Southfield, Livonia, Sterling Heights, Westland."
+      }
+    ]
+  }
+}
+</script>
 </head>
 <body>
 <div id="root"></div>

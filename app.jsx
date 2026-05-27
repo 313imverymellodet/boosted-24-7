@@ -1,6 +1,31 @@
 const { useState, useEffect, useRef } = React;
 
 // ============================================================
+// CONFIG
+// ============================================================
+
+const PHONE = "3137717521";
+const PHONE_DISPLAY = "(313) 771-7521";
+const PHONE_HREF = `tel:${PHONE}`;
+
+// Stripe Payment Links — one per tier. The user can swap these anytime
+// in the Stripe dashboard without redeploying.
+const STRIPE_LINKS = {
+  metro:     "https://buy.stripe.com/eVqaEXftF8cs1WSc6Y2cg01",
+  outside:   "https://buy.stripe.com/fZu7sLdlxdwMgRM5IA2cg02",
+  latenight: "https://buy.stripe.com/7sYeVddlxfEUcBw3As2cg03",
+  custom:    "https://buy.stripe.com/9B628rgxJcsIdFA4Ew2cg00",
+};
+
+// Append the customer's phone (digits only) as client_reference_id so
+// it shows in the Stripe dashboard alongside the payment.
+const stripeUrlFor = (tier, phone) => {
+  if (!tier || !tier.stripeUrl) return null;
+  const digits = (phone || "").replace(/\D/g, "");
+  return digits ? `${tier.stripeUrl}?client_reference_id=${digits}` : tier.stripeUrl;
+};
+
+// ============================================================
 // SHARED PRIMITIVES
 // ============================================================
 
@@ -96,8 +121,8 @@ const TopBar = ({ onPayClick }) => {
             <LiveDot size={6} color="#27c46b" />
             ON SHIFT · CREWS AVAILABLE
           </span>
-          <a href="tel:3137717521" className="topbar-call">
-            <span className="mono">CALL (313) 771-7521</span>
+          <a href={PHONE_HREF} className="topbar-call">
+            <span className="mono">CALL {PHONE_DISPLAY}</span>
           </a>
         </div>
       </div>
@@ -141,9 +166,9 @@ const Hero = ({ onPay, onCall }) => {
           </div>
 
           <div className="hero-ctas">
-            <a href="tel:3137717521" className="btn btn-rust" onClick={onCall}>
+            <a href={PHONE_HREF} className="btn btn-rust" onClick={onCall}>
               <span className="btn-label">CALL NOW</span>
-              <span className="btn-sub mono">(313) 771-7521</span>
+              <span className="btn-sub mono">{PHONE_DISPLAY}</span>
             </a>
             <button className="btn btn-ghost" onClick={onPay}>
               <span className="btn-label">PAY ONLINE</span>
@@ -165,6 +190,12 @@ const Hero = ({ onPay, onCall }) => {
               <div className="stat-label mono">DETROIT METRO</div>
             </div>
           </div>
+
+          <ul className="hero-guarantees" aria-label="Service guarantees">
+            <li><span className="g-mark" aria-hidden="true">+</span><Mono>BOOST DOESN'T TAKE? FREE DIAGNOSTIC</Mono></li>
+            <li><span className="g-mark" aria-hidden="true">+</span><Mono>NO MEMBERSHIP · NO HIDDEN FEES</Mono></li>
+            <li><span className="g-mark" aria-hidden="true">+</span><Mono>REAL HUMANS · NOT A CALL CENTER</Mono></li>
+          </ul>
         </div>
 
         {/* Right: dispatch panel */}
@@ -267,7 +298,7 @@ const DispatchPanel = () => {
       </div>
 
       <div className="dispatch-foot">
-        <Mono className="dim">UPDATED CONTINUOUSLY</Mono>
+        <Mono className="dim">INDICATIVE · CALL FOR LIVE ETA</Mono>
         <Mono>v.24.7</Mono>
       </div>
     </div>
@@ -293,6 +324,7 @@ const tiers = [
       "Pro technician on every call",
     ],
     cta: "PAY $60 NOW",
+    stripeUrl: STRIPE_LINKS.metro,
   },
   {
     id: "outside",
@@ -307,6 +339,7 @@ const tiers = [
       "Pro technician on every call",
     ],
     cta: "PAY $80 NOW",
+    stripeUrl: STRIPE_LINKS.outside,
   },
   {
     id: "latenight",
@@ -321,6 +354,7 @@ const tiers = [
       "Quote given on call",
     ],
     cta: "PAY FOR LATE NIGHT",
+    stripeUrl: STRIPE_LINKS.latenight,
   },
 ];
 
@@ -402,6 +436,18 @@ const Pricing = ({ onPay }) => {
           <Mono className="dim">GUARANTEE</Mono>
           <span>Boost doesn't take? We diagnose, free.</span>
         </div>
+      </div>
+
+      <div className="pricing-custom">
+        <Mono className="dim">SOMETHING DIFFERENT?</Mono>
+        <a
+          href={STRIPE_LINKS.custom}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="pricing-custom-link mono"
+        >
+          PAY A CUSTOM AMOUNT →
+        </a>
       </div>
     </section>
   );
@@ -535,6 +581,16 @@ const Coverage = () => {
                 <g
                   key={z.id}
                   onClick={() => setActive(z.id)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setActive(z.id);
+                    }
+                  }}
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`Select ${z.name} zone, ${z.eta} minute ETA, ${z.primary ? "primary tier $60" : "extended tier $80"}`}
+                  aria-pressed={isActive}
                   style={{ cursor: "pointer" }}
                   className="zone-pin"
                 >
@@ -589,9 +645,9 @@ const Coverage = () => {
                 </div>
               </div>
             </div>
-            <a href="tel:3137717521" className="btn btn-rust btn-block">
+            <a href={PHONE_HREF} className="btn btn-rust btn-block">
               <span className="btn-label">DISPATCH TO {activeZ.name.toUpperCase()}</span>
-              <span className="btn-sub mono">(313) 771-7521</span>
+              <span className="btn-sub mono">{PHONE_DISPLAY}</span>
             </a>
           </div>
 
@@ -696,8 +752,8 @@ const ClosingCTA = ({ onPay }) => (
         Don't wait it out. Call or pay — either gets a rig rolling toward you in under five minutes.
       </p>
       <div className="closing-ctas">
-        <a href="tel:3137717521" className="btn btn-rust btn-lg">
-          <span className="btn-label">CALL (313) 771-7521</span>
+        <a href={PHONE_HREF} className="btn btn-rust btn-lg">
+          <span className="btn-label">CALL {PHONE_DISPLAY}</span>
           <span className="btn-sub mono">FASTEST DISPATCH</span>
         </a>
         <button className="btn btn-bone btn-lg" onClick={onPay}>
@@ -724,7 +780,7 @@ const Footer = () => (
       <div>
         <Mono className="dim">DISPATCH</Mono>
         <ul className="footer-list">
-          <li><a href="tel:3137717521">(313) 771-7521</a></li>
+          <li><a href={PHONE_HREF}>{PHONE_DISPLAY}</a></li>
           <li>Detroit Metro · 24/7</li>
         </ul>
       </div>
@@ -755,19 +811,11 @@ const Footer = () => (
 // ============================================================
 
 const PayModal = ({ tier, onClose }) => {
-  const [method, setMethod] = useState("card");
   const [step, setStep] = useState(0);
   const [location, setLocation] = useState("");
   const [phone, setPhone] = useState("");
 
   if (!tier) return null;
-
-  const methods = [
-    { id: "card", label: "Card", sub: "Visa · MC · Amex" },
-    { id: "cashapp", label: "CashApp", sub: "$MotorCityBoost" },
-    { id: "venmo", label: "Venmo", sub: "@boosted-247" },
-    { id: "apple", label: "Apple Pay", sub: "Tap to pay" },
-  ];
 
   return (
     <div className="modal-shell" onClick={onClose}>
@@ -811,18 +859,11 @@ const PayModal = ({ tier, onClose }) => {
               />
             </div>
             <div className="form-row">
-              <Mono className="dim">PAYMENT METHOD</Mono>
-              <div className="method-grid">
-                {methods.map((m) => (
-                  <button
-                    key={m.id}
-                    className={"method " + (method === m.id ? "method-active" : "")}
-                    onClick={() => setMethod(m.id)}
-                  >
-                    <div className="method-label">{m.label}</div>
-                    <Mono className="dim">{m.sub}</Mono>
-                  </button>
-                ))}
+              <Mono className="dim">PAYMENT</Mono>
+              <div className="pay-methods-info">
+                <Mono>STRIPE CHECKOUT</Mono>
+                <Mono className="dim">CARD · APPLE PAY · CASH APP PAY</Mono>
+                <Mono className="dim" style={{ marginTop: 6 }}>VENMO &amp; CASH ACCEPTED IN-PERSON</Mono>
               </div>
             </div>
 
@@ -852,10 +893,6 @@ const PayModal = ({ tier, onClose }) => {
                 <Mono className="dim">TIER</Mono>
                 <span>{tier.label}</span>
               </div>
-              <div className="confirm-row">
-                <Mono className="dim">METHOD</Mono>
-                <span>{methods.find((m) => m.id === method).label}</span>
-              </div>
               <div className="confirm-row confirm-total">
                 <Mono className="dim">TOTAL</Mono>
                 <span className="big">{tier.price !== null ? `$${tier.price}.00` : "Quote on call"}</span>
@@ -863,17 +900,31 @@ const PayModal = ({ tier, onClose }) => {
             </div>
 
             <div className="confirm-note">
-              <Mono className="dim">DEMO PROTOTYPE</Mono>
-              <p>This is a working layout — real checkout would hand off to Stripe / CashApp / Venmo here.</p>
+              <Mono className="dim">NEXT</Mono>
+              <p>You'll be handed off to Stripe to pay securely. After payment, a crew calls you back within minutes to confirm pickup.</p>
             </div>
 
             <div className="form-actions">
               <button className="btn btn-ghost" onClick={() => setStep(0)}>
                 <span className="btn-label">← BACK</span>
               </button>
-              <a href="tel:3137717521" className="btn btn-rust">
-                <span className="btn-label">CALL TO CONFIRM</span>
-                <span className="btn-sub mono">(313) 771-7521</span>
+              <a
+                href={stripeUrlFor(tier, phone)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-rust"
+              >
+                <span className="btn-label">
+                  {tier.price !== null ? `PAY $${tier.price} NOW` : "PAY LATE NIGHT FEE"}
+                </span>
+                <span className="btn-sub mono">SECURE · STRIPE</span>
+              </a>
+            </div>
+
+            <div className="confirm-callfallback">
+              <Mono className="dim">PREFER TO TALK FIRST?</Mono>
+              <a href={PHONE_HREF} className="mono callfallback-link">
+                CALL {PHONE_DISPLAY}
               </a>
             </div>
           </div>
@@ -889,7 +940,7 @@ const PayModal = ({ tier, onClose }) => {
 
 const StickyAction = ({ onPay }) => (
   <div className="sticky-action">
-    <a href="tel:3137717521" className="btn btn-rust btn-flex">
+    <a href={PHONE_HREF} className="btn btn-rust btn-flex">
       <span className="btn-label">CALL NOW</span>
     </a>
     <button className="btn btn-bone btn-flex" onClick={onPay}>

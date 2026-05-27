@@ -1110,3 +1110,106 @@ section { padding: 96px 0; position: relative; }
   .hero-ctas { width: 100%; }
   .hero-ctas .btn { flex: 1; }
 }
+
+/* ============================================================
+   ENHANCEMENTS — guarantees strip, custom-amount link,
+   informational payment block, call fallback in modal.
+   ============================================================ */
+
+.hero-guarantees {
+  list-style: none;
+  margin: 32px 0 0;
+  padding: 16px 18px;
+  border: 1px solid var(--hairline);
+  border-left: 2px solid var(--rust);
+  background: rgba(214, 57, 25, 0.04);
+  display: grid;
+  gap: 8px;
+}
+.hero-guarantees li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--bone-dim);
+}
+.hero-guarantees .g-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--rust);
+  color: var(--rust);
+  font-size: 12px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.pricing-custom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 20px 32px;
+  border-top: 1px solid var(--hairline);
+  background: var(--steel);
+}
+.pricing-custom-link {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--rust);
+  border-bottom: 1px solid var(--rust);
+  padding-bottom: 2px;
+  transition: color 0.15s ease;
+}
+.pricing-custom-link:hover {
+  color: var(--bone);
+  border-bottom-color: var(--bone);
+}
+
+.pay-methods-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border: 1px solid var(--hairline);
+  background: var(--ink);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+
+.confirm-callfallback {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--hairline);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.callfallback-link {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--bone);
+  border-bottom: 1px solid var(--bone-dim);
+  padding-bottom: 2px;
+}
+.callfallback-link:hover { color: var(--rust); border-bottom-color: var(--rust); }
+
+/* SVG zone focus ring for keyboard navigation */
+.zone-pin:focus-visible {
+  outline: none;
+}
+.zone-pin:focus-visible circle:first-of-type {
+  stroke: var(--bone);
+  stroke-width: 1.5;
+}
+
+@media (max-width: 720px) {
+  .hero-guarantees { margin-top: 24px; padding: 14px; }
+  .pricing-custom { padding: 16px; flex-direction: column; align-items: flex-start; gap: 8px; }
+}
