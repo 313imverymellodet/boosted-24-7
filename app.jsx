@@ -26,6 +26,42 @@ const stripeUrlFor = (tier, phone) => {
 };
 
 // ============================================================
+// LEAD CAPTURE — fires customer-form submissions to the inbox via
+// Formsubmit.co (no backend required). On first submission Formsubmit
+// emails LEAD_EMAIL with a one-click activation link; activate once
+// and subsequent leads land directly in the inbox. To keep the email
+// out of the page source, swap LEAD_FORM_ENDPOINT to the hashed
+// alias Formsubmit issues after activation.
+// ============================================================
+
+const LEAD_EMAIL = "mello@boostdetroit247.com";
+const LEAD_FORM_ENDPOINT = `https://formsubmit.co/ajax/${LEAD_EMAIL}`;
+
+const submitLead = async (payload) => {
+  try {
+    const body = {
+      _subject: payload._subject || "New form submission — boosted-24-7",
+      _captcha: "false",
+      _template: "table",
+      _replyto: payload.phone || "",
+      submitted_at: new Date().toLocaleString("en-US", { timeZone: "America/Detroit" }),
+      source_url: typeof window !== "undefined" ? window.location.href : "",
+      ...payload,
+    };
+    const res = await fetch(LEAD_FORM_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(body),
+    });
+    return res.ok;
+  } catch (e) {
+    // Don't block UX on email failures — Stripe is the source of truth.
+    console.warn("Lead notification failed:", e);
+    return false;
+  }
+};
+
+// ============================================================
 // SHARED PRIMITIVES
 // ============================================================
 
@@ -869,7 +905,19 @@ const PayModal = ({ tier, onClose }) => {
 
             <button
               className="btn btn-rust btn-block"
-              onClick={() => setStep(1)}
+              onClick={() => {
+                // Fire-and-forget: capture the lead in the inbox the
+                // moment the customer commits, before the Stripe hand-off.
+                // Even if they bail on payment, we have their info to call.
+                submitLead({
+                  _subject: `Boost lead — ${tier.label}${tier.price !== null ? ` · $${tier.price}` : " · Late Night"}`,
+                  tier: tier.label,
+                  price: tier.price !== null ? `$${tier.price}` : "Variable (late night)",
+                  location,
+                  customer_phone: phone,
+                });
+                setStep(1);
+              }}
               disabled={!location || !phone}
             >
               <span className="btn-label">CONTINUE TO PAY{tier.price ? ` $${tier.price}` : ""}</span>
