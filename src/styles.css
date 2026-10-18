@@ -116,7 +116,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url("images/detroit-street.jpg");
+  background-image: url("/images/detroit-street.jpg");
   background-size: cover;
   background-position: center 35%;
   filter: grayscale(0.4) contrast(1.05) brightness(0.55);
@@ -988,7 +988,7 @@ section { padding: 96px 0; position: relative; }
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url("images/detroit-skyline.jpg");
+  background-image: url("/images/detroit-skyline.jpg");
   background-size: cover;
   background-position: center;
   filter: grayscale(0.15) contrast(1.05) brightness(0.85);
@@ -1212,4 +1212,132 @@ section { padding: 96px 0; position: relative; }
 @media (max-width: 720px) {
   .hero-guarantees { margin-top: 24px; padding: 14px; }
   .pricing-custom { padding: 16px; flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+
+/* ============================================================
+   FAQ, service-area pages, crawlable area links
+   ============================================================ */
+
+.footer-brand { display: inline-block; }
+
+.city-hero .display {
+  font-size: clamp(56px, 8.5vw, 148px);
+  line-height: 0.86;
+}
+.city-hero .readout-name {
+  overflow-wrap: break-word;
+}
+.city-section-title {
+  font-size: clamp(40px, 6.5vw, 92px);
+  overflow-wrap: break-word;
+}
+
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 16px;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+.breadcrumb a:hover { color: var(--rust); }
+
+.area-strip {
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 28px 32px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 22px;
+  align-items: baseline;
+}
+.area-strip a,
+.area-strip [aria-current="page"] {
+  font-family: "Big Shoulders Display", sans-serif;
+  font-weight: 800;
+  font-size: 26px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--hairline);
+  line-height: 1.1;
+}
+.area-strip a:hover,
+.area-strip [aria-current="page"] {
+  color: var(--rust);
+  border-bottom-color: var(--rust);
+}
+
+.faq {
+  background: var(--steel);
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+}
+.faq-list {
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 0 32px;
+  border-top: 1px solid var(--hairline);
+}
+.faq-item {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr);
+  gap: 28px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.faq-item h3 {
+  font-family: "Big Shoulders Display", sans-serif;
+  font-size: clamp(28px, 3vw, 42px);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+.faq-item p {
+  color: var(--bone-dim);
+  font-size: 16px;
+  max-width: 68ch;
+}
+
+.city-prose {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: grid;
+  gap: 16px;
+}
+.city-prose p { font-size: 17px; color: var(--bone-dim); }
+.city-facts {
+  list-style: none;
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 16px 18px;
+  border: 1px solid var(--hairline);
+  border-left: 2px solid var(--rust);
+  background: rgba(214, 57, 25, 0.04);
+}
+.city-facts li { font-size: 14px; color: var(--bone); }
+
+.tier-note a { border-bottom: 1px solid var(--rust); }
+.tier-note a:hover { color: var(--rust); }
+
+.zl-line { display: flex; align-items: center; gap: 4px; }
+.zl-line .zl-row { flex: 1; width: auto; }
+.zl-more {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--rust);
+  padding: 8px 6px;
+  flex-shrink: 0;
+}
+.zl-more:hover { color: var(--bone); }
+
+@media (max-width: 720px) {
+  .faq-item { grid-template-columns: 1fr; gap: 10px; padding: 22px 0; }
+  .faq-list, .city-prose, .area-strip { padding-left: 16px; padding-right: 16px; }
+  .area-strip a, .area-strip [aria-current="page"] { font-size: 22px; }
+  .zl-line { align-items: stretch; }
+  .zl-more { align-self: center; }
 }
